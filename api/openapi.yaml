@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  contact:
+    email: robin.li@trustasia.com
+    name: robin.li
+    url: https://www.trustasia.com
+  description: TA-GM API接口
+  title: TA-GM模块
+  version: 1.0-SNAPSHOT
+servers:
+  - description: Generated server url
+    url: https://localhost:9090
+security:
+  - openApiSecurityScheme: [ ]
+tags:
+  - description: ' OpenApi测试接口'
+    name: TestApi
+paths:
+  /openApi/test/info:
+    get:
+      description: 获取基本信息
+      operationId: getInfo
+      parameters:
+        - description: 名称
+          explode: true
+          in: query
+          name: name
+          required: true
+          schema:
+            description: 名称
+          style: form
+        - description: 年龄
+          explode: true
+          in: query
+          name: age
+          required: true
+          schema:
+            description: 年龄
+            format: int32
+          style: form
+      responses:
+        "401":
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ResponseResultString'
+                  - $ref: '#/components/schemas/ResponseResult'
+          description: Unauthorized
+        "400":
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ResponseResult'
+                  - $ref: '#/components/schemas/ResponseResultString'
+          description: Bad Request
+        "403":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponseResultString'
+          description: Forbidden
+        "429":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponseResultString'
+          description: Too Many Requests
+        "500":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponseResultString'
+          description: Internal Server Error
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponseResultTestVO'
+          description: OK
+      security:
+        - openApiSecurityScheme: [ ]
+      tags:
+        - TestApi
+      x-accepts: '*/*'
+components:
+  headers:
+    x-time:
+      description: 时间戳
+      example: 2025-04-09 10:52:01
+      explode: false
+      required: true
+      style: simple
+    x-random:
+      description: 随机数
+      example: "1234567890"
+      explode: false
+      required: true
+      style: simple
+    x-signature:
+      description: 签名
+      explode: false
+      required: true
+      style: simple
+  schemas:
+    ResponseResultString:
+      properties:
+        timestamp:
+          format: int64
+        code:
+          format: int32
+        message: { }
+        data: { }
+      required:
+        - code
+        - timestamp
+    ResponseResult:
+      properties:
+        timestamp:
+          format: int64
+        code:
+          format: int32
+        message: { }
+        data: { }
+      required:
+        - code
+        - timestamp
+    ResponseResultTestVO:
+      example:
+        code: ""
+        data:
+          id: ""
+        message: ""
+        timestamp: ""
+      properties:
+        timestamp:
+          format: int64
+        code:
+          format: int32
+        message: { }
+        data:
+          $ref: '#/components/schemas/TestVO'
+      required:
+        - code
+        - timestamp
+    TestVO:
+      example:
+        id: ""
+      properties:
+        id:
+          format: int64
+  securitySchemes:
+    openApiSecurityScheme:
+      scheme: https
+      type: mutualTLS
+
